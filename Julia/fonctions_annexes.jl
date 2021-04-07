@@ -129,3 +129,16 @@ function CovVarEdsi(X::Matrix,Y::Matrix )
         
         
 end
+
+function EmpCov(X::Matrix,Y::Matrix)
+
+    N,M = size(X)
+    
+    Cov = zeros(M, M)
+    
+    for i = 1:N
+         Cov = Cov + X[i,:] .* Y[i,:]'
+    end
+    
+    return Cov/N
+end

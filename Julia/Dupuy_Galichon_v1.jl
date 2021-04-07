@@ -44,6 +44,15 @@ SscaleY = z_diag(sdY)
 X = X*inv(SscaleX); # divide each entry by the SD of its variable ==> standardizing
 Y = Y*inv(SscaleY);
 
+roX , colX = size(X);
 
 CVE = CovVarEdsi(X,Y)
 Cov_XY_XY, Cov_XX_XX, Cov_YY_YY, Cov_XX_YY =  CVE[:Cov_XY_XY], CVE[:Cov_XX_XX], CVE[:Cov_YY_YY], CVE[:Cov_XX_YY]
+
+sigmaHat = EmpCov(X,Y)
+
+T = 1
+maxIter = 2000
+maxFunEvals = 10000
+
+startMatrix = ones(colX, colX)
