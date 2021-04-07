@@ -45,21 +45,5 @@ X = X*inv(SscaleX); # divide each entry by the SD of its variable ==> standardiz
 Y = Y*inv(SscaleY);
 
 
-[Cov_XY_XY, Cov_XX_XX, Cov_YY_YY, Cov_XX_YY] = CovVarEdsi(X,Y)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+CVE = CovVarEdsi(X,Y)
+Cov_XY_XY, Cov_XX_XX, Cov_YY_YY, Cov_XX_YY =  CVE[:Cov_XY_XY], CVE[:Cov_XX_XX], CVE[:Cov_YY_YY], CVE[:Cov_XX_YY]
