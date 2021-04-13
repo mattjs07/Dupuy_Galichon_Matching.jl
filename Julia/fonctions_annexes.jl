@@ -53,7 +53,7 @@ function CovVarEdsi(X::Matrix,Y::Matrix )
              
               k = (i-1)*Ky + j
               phi_xy = hcat(phi_xy, X[:,i].*Y[:,j])
-                         
+                      
             end
         end
 
@@ -142,3 +142,4 @@ function EmpCov(X::Matrix,Y::Matrix)
     
     return Cov/N
 end
+
