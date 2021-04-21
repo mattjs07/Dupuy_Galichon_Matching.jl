@@ -1,8 +1,8 @@
-# My Replication of xyz
+# My Replication of Dupuy and Galichon "Personality Traits and the Marriage Market" (2014)
 
 > This replication study was part of my evaluation for the course [Numerical Methods](https://floswald.github.io/NumericalMethods/) at SciencesPo Paris in Spring 2021
 
-In this replication study, we do ...
+In this replication study, we do translate the original matlab code into Julia lang.
 
 ```@autodocs
 Modules = [Dupuy_Galichon_Matching]
