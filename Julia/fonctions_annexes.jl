@@ -143,3 +143,36 @@ function EmpCov(X::Matrix,Y::Matrix)
     return Cov/N
 end
 
+function length_(X::Matrix)
+    a,b = size(X)
+    return max(a,b)
+
+end
+
+function discretePdf(X::Matrix, Y::Matrix)
+    N = length_(X)
+
+    pdfX = 1/ length(X[:,1]) * ones(N,1)
+    pdfY = 1/ length(Y[:,1]) * ones(N,1)
+
+    return [pdfX, pdfY]
+end
+
+function OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int64)
+
+maxIter = 10
+pdfX,pdfY = discretePdf(X,Y);
+
+r = exp(auxVar/ T) #up to there c'est bon 
+normConstR = sum(sum(r,dims = 1)) #but here results differ, dunno why 
+r = r/normConstR;
+
+
+end
+
+function ObjectiveFunction(A::Vector,X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64)
+
+    auxVar = X * A * Y'
+
+    Pi = OptimalPi(auxVar,X,Y,T)
+end
