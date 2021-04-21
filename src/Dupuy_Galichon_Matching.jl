@@ -9,10 +9,10 @@ Return "Hello, `who`".
 hello(who::String) = "Hello, $who"
 
 """
-    domath(x::Number)
+    domath(x::Number, y::Number)
 
-Return `x + 5`.
+Return `x + y`.
 """
-domath(x::Number) = x + 5
+domath(x::Number, y::Number) = x + y
 
 end
