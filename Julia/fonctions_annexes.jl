@@ -158,16 +158,47 @@ function discretePdf(X::Matrix, Y::Matrix)
     return [pdfX, pdfY]
 end
 
+function StartingValues(X::Matrix, Y::Matrix)
+
+    N,M = size(X)
+    u0 = log(N) * ones(N,1)
+    v0 = -ones(N,1)
+    return u0, v0
+end
+
 function OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int64)
 
 maxIter = 10
 pdfX,pdfY = discretePdf(X,Y);
 
-r = exp(auxVar/ T) #up to there c'est bon 
-normConstR = sum(sum(r,dims = 1)) #but here results differ, dunno why 
-r = r/normConstR;
+r = exp.(auxVar/ T)
 
+normConstR = sum(sum(r,dims = 1))  
+r = r/normConstR
 
+u0, v0 = StartingValues(X,Y)
+a0 = exp.(u0)
+b0 = exp.(v0)
+
+ak = a0
+bk = b0
+
+for j in 1:maxIter
+    bk = pdfY./(r'*ak)
+    ak = pdfX./(r*bk)
+end
+
+normConst = ak' * r * bk
+
+Pi  = r .* (ak * bk')
+Pi  = Pi ./ normConst
+
+return Pi
+end
+
+function xlogx(x::Matrix)
+
+    res = x .* log.(x + eps() * (x .<= 0))   ##
 end
 
 function ObjectiveFunction(A::Vector,X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64)
@@ -175,4 +206,12 @@ function ObjectiveFunction(A::Vector,X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int
     auxVar = X * A * Y'
 
     Pi = OptimalPi(auxVar,X,Y,T)
+
+    TwistedTrace = sum(sum(auxVar .* Pi))
+    entropy = sum(sum(-xlogx(Pi), dims = 1))
+    OptCov = X' * Pi * Y
+
+    f = TwistedTrace + T * entropy - tr(sigmaHat' * A)
+    G = OptCov - sigmaHat;
+    
 end
