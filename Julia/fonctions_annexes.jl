@@ -201,8 +201,9 @@ function xlogx(x::Matrix)
     res = x .* log.(x + eps() * (x .<= 0))   ##
 end
 
-function ObjectiveFunction(A::Vector,X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64)
+function ObjectiveFunction(A::Matrix,X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64)  ## Not sure regarding the type of A
 
+    # Need to redefine the input A, using splatting ! (see .jpg in /Julia)
     auxVar = X * A * Y'
 
     Pi = OptimalPi(auxVar,X,Y,T)
@@ -213,5 +214,7 @@ function ObjectiveFunction(A::Vector,X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int
 
     f = TwistedTrace + T * entropy - tr(sigmaHat' * A)
     G = OptCov - sigmaHat;
-    
+
+    return f, G
 end
+

@@ -83,7 +83,29 @@ ub =  normConstraint * ones(colX, colX)
 # Alternatives = NLopt.jl (cannot return hessian either ... )
 # Hessian is a 100 x 100 matrix
 using JuMP
-using Ipopt
+using(Ipopt)
+
+m = Model(Ipopt.Optimizer)
+set_optimizer_attribute(m, MOI.Silent(), true)
+
+@variable(m, A[1:colX,1:colX])
+
+JuMP.register(m, :ObjectiveFunction, 5, ObjectiveFunction, autodiff=true)
+
+@NLobjective(m, Min, ObjectiveFunction(A,X,Y,sigmaHat,T) )
+
+JuMP.optimize!(m)
+
+
+
+
+
+
+
+
+
+
+
 
 
 # The first reported table "Affinity.tex" reports the result of the optimization (no need hessian here)
