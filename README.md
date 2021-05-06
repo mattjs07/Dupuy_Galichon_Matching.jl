@@ -1,3 +1,3 @@
 # Dupuy_Galichon_Matching.jl
 
-Would like to build the badges
+This is a replication of the paper by Dupuy and Galichon
