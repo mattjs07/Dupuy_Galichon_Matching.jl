@@ -63,15 +63,6 @@ startMatrix = ones(colX, colX)
 
 normConstraint = 100000;
 
-A = [];
-b = [];
-Aeq = [0 1 0 0 ; 0 0 1 0 ];
-beq = [0 0];
-lb =- normConstraint * ones(colX, colX)
-ub =  normConstraint * ones(colX, colX)
-
-
-
 # UNConstrained optimization, will have to use Optim.jl
 #What is the objective function ? 
 #There are parameters fed to the optimizing function, translate to Julia. 
@@ -83,22 +74,24 @@ ub =  normConstraint * ones(colX, colX)
 # Alternatives = NLopt.jl (cannot return hessian either ... )
 # Hessian is a 100 x 100 matrix
 using JuMP
-using(Ipopt)
+using Ipopt
 
 m = Model(Ipopt.Optimizer)
 set_optimizer_attribute(m, MOI.Silent(), true)
 
-@variable(m, A[1:colX,1:colX])
+@variable(m, A[1:colX,1:colX]) # 10 * 10 = 100 --> 100 more arguments to the function 
 
-JuMP.register(m, :ObjectiveFunction, 5, ObjectiveFunction, autodiff=true)
+nv = colX^2 + 5
+JuMP.register(m, :ObjectiveFunction, nv, ObjectiveFunction, autodiff=true)
 
-@NLobjective(m, Min, ObjectiveFunction(A,X,Y,sigmaHat,T) )
+@NLobjective(m, Min, ObjectiveFunction(X,Y,sigmaHat,T,A...) ) #Does not work here 
 
 JuMP.optimize!(m)
 
+using Optim
 
-
-
+opti = optimize(A -> ObjectiveFunction(X,Y,sigmaHat,T,A), startMatrix , NewtonTrustRegion()) #cannot compute the gradient and Hessian because it is in matrix form ...
+                                                                                            # In matrix differentation, you need "Tensors" ! 
 
 
 
