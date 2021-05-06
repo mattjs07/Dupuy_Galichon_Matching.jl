@@ -1,21 +1,10 @@
-module Dupuy_Galichon_Matching
-export hello, domath
+module Dupuy_Galichon_Matching 
 
-"""
-    hello(who::String)
-
-Return "Hello, `who`".
-"""
-hello(who::String) = "Hello, $who"
-
-"""
-    domath(x::Number, y::Number)
-
-Return `x + y`.
-"""
-domath(x::Number, y::Number) = x + y
-
-end
+using CSV
+using DataFrames
+using DataFramesMeta
+using Statistics
+using LinearAlgebra
 
 
 """
@@ -81,5 +70,4 @@ function z_diag(x::Vector)
     return(z)
 end
 
-
-
+end
