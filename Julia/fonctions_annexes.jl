@@ -23,7 +23,7 @@ end
 
 function convertion_df!(x::DataFrame)
     for i in 1:size(x)[2]
-        x[i] = convertion.(x[i])
+        x[!,i] = convertion.(x[!,i])
     end      
 end
 
