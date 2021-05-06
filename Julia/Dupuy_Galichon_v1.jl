@@ -76,21 +76,18 @@ normConstraint = 100000;
 using JuMP
 using Ipopt
 
-m = Model(Ipopt.Optimizer)
+m = Model(optimizer_with_attributes(Ipopt.Optimizer,"max_iter" => maxIter, "tol" => 1e-08    ))
 set_optimizer_attribute(m, MOI.Silent(), true)
-
-@variable(m, A[1:colX,1:colX]) # 10 * 10 = 100 --> 100 more arguments to the function 
-
-nv = colX^2 + 5
+@variable(m, A[1:colX,1:colX]) 
+nv = colX^2
 JuMP.register(m, :ObjectiveFunction, nv, ObjectiveFunction, autodiff=true)
-
 @NLobjective(m, Min, ObjectiveFunction(X,Y,sigmaHat,T,A...) ) #Does not work here 
+@show JuMP.optimize!(m)
 
-JuMP.optimize!(m)
 
 using Optim
 
-opti = optimize(A -> ObjectiveFunction(X,Y,sigmaHat,T,A), startMatrix , NewtonTrustRegion()) #cannot compute the gradient and Hessian because it is in matrix form ...
+opti = optimize(A -> ObjectiveFunction(X,Y,sigmaHat,T,A), startMatrix , NelderMead()) #cannot compute the gradient and Hessian because it is in matrix form ...
                                                                                             # In matrix differentation, you need "Tensors" ! 
 
 

@@ -201,9 +201,9 @@ function xlogx(x::Matrix)
     res = x .* log.(x + eps() * (x .<= 0))   ##
 end
 
-function ObjectiveFunction(A::Matrix,X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64)  ## Not sure regarding the type of A
+function ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64,A... )
 
-    # Need to redefine the input A, using splatting ! (see .jpg in /Julia)
+    A = reshape(collect(A), (colX, colX)) #colX is the number of columns of X (same as Y)
     auxVar = X * A * Y'
 
     Pi = OptimalPi(auxVar,X,Y,T)
@@ -212,9 +212,8 @@ function ObjectiveFunction(A::Matrix,X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int
     entropy = sum(sum(-xlogx(Pi), dims = 1))
     OptCov = X' * Pi * Y
 
-    f = TwistedTrace + T * entropy - tr(sigmaHat' * A)
+    f = TwistedTrace + T * entropy - tr(sigmaHat' *  A)
     G = OptCov - sigmaHat;
 
-    return f, G
+    return f   # Might want to get rid go G as the userdefined function to be optimized must return a Scalar !
 end
-
