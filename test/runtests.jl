@@ -1,5 +1,8 @@
 using Test, Dupuy_Galichon_Matching, DataFrames, Statistics, LinearAlgebra
 
+x = rand(5, 5)
+y = rand(5, 5)
+@test Dupuy_Galichon_Matching.mm(x,y) .≈ x * y
 @test Dupuy_Galichon_Matching.convertion("0,01") == 0.01 
 
 df = DataFrame(A = 1:4, B = ["1,01", "1.1", "2", "10,2"])
