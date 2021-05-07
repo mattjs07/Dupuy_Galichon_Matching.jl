@@ -50,5 +50,3 @@ a = [ 1 2 3 4]
 colX = 2
 
 @test Dupuy_Galichon_Matching.ObjectiveFunction(x,y,z,t,colX,a...) ≈ 11.38629436111989
-
-

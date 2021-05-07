@@ -130,7 +130,5 @@ a = [ 1 2 3 4]
 t = 1
 colX = 2
 
-A = reshape(collect(A), (colX, colX))
-collect(a)
 
-ObjectiveFunction(x,y,z,t,a)
+ObjectiveFunction(x,y,z,t,a...)
