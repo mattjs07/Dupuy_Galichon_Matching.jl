@@ -109,3 +109,24 @@ function Obj(A... )
   A = reshape(collect(A), (colX, colX))
 
 end
+
+
+a = Matrix{Float64}(undef,2,1)
+q[1]
+
+
+
+
+s1, s2= StartingValues(x,z)
+
+s1
+
+typeof(s)
+
+
+z = [ 1 2; 1 2]
+x, y, a = z, z, z
+t = 1
+colX = 2
+
+ObjectiveFunction(x,y,z,t,a...)
