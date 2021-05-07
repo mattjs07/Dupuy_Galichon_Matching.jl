@@ -276,9 +276,10 @@ function OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int64)
     """
         ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64,A... )
     Objective function used to compute the optimal Affinity Matrix. \\
-    A is splat as it is the argument over which we arg min using JuMP.
+    A is splat as it is the argument over which we arg min using JuMP. \\
+    colX is required to reshape A into a matrix.
     """
-    function ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64,A... )
+    function ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64, colX::Int, A... )
     
         A = reshape(collect(A), (colX, colX)) #colX is the number of columns of X (same as Y)
         auxVar = X * A * Y'

@@ -46,4 +46,9 @@ l = Matrix{Float64}(undef,2,2)
 l .= 1.3862943611198906  
 @test Dupuy_Galichon_Matching.xlogx([ 2 2; 2 2]) ≈ l
 
+a = [ 1 2 3 4]
+colX = 2
+
+@test Dupuy_Galichon_Matching.ObjectiveFunction(x,y,z,t,colX,a...) ≈ 11.38629436111989
+
 

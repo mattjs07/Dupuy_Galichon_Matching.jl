@@ -125,8 +125,12 @@ typeof(s)
 
 
 z = [ 1 2; 1 2]
-x, y, a = z, z, z
+x, y = z, z
+a = [ 1 2 3 4]
 t = 1
 colX = 2
 
-ObjectiveFunction(x,y,z,t,a...)
+A = reshape(collect(A), (colX, colX))
+collect(a)
+
+ObjectiveFunction(x,y,z,t,a)
