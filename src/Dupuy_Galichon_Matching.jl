@@ -5,7 +5,8 @@ using DataFrames
 using DataFramesMeta
 using Statistics
 using LinearAlgebra
-
+using JuMP
+using Ipopt
 
 """
     mm(x::Matrix, y::Matrix)
@@ -320,7 +321,57 @@ function OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int64)
     
         return f   # Might want to get rid go G as the userdefined function to be optimized must return a Scalar !
     end
-    
 
+
+"""
+AffinityMatrix(df::DataFrame)
+Function allowing to compute the Affinity Matrix between two groups X and Y. \\
+For m characteristics per group, returns a m x m Affinity Matrix. \\
+!!! The input Dataframe contains columns of characteristics which must be ordered as follow : \\
+> The Number of characteristics for X must be equal to the number of characteristics of y. \\
+> If the total number of columns = n, then columns 1 to n/2 are X's and columns n/2+1 to n are Y's. \\
+> In each group the column must be ordered alike. \\
+> e.g A Dataframe with 3 characteristics, the columns are arranged as :  [X.education, X.age, X.sex , Y.education, Y.age, Y.sex ] \\
+"""
+function AffinityMatrix(df::DataFrame)
+convertion_df!(df)
+col = size(df)[2]
+m =  convert(Int, col/2)
+X = select(df, 1:m )
+Y = select(df, (m+1):col)
+namesX = names(X)
+namesY = names(Y)
+X= Matrix(X)
+Y= Matrix(Y)
+zX = z_diag_f(X, mean)
+X = X - ones(size(X)[1],size(X)[2]) * zX 
+zY = z_diag_f(Y, mean)
+Y = Y - ones(size(Y)[1],size(Y)[2]) * zY 
+covX = cov(X)
+sdX = sqrt.(covX[diagind(covX)])
+SscaleX = z_diag(sdX)
+covY = cov(Y)
+sdY = sqrt.(covY[diagind(covY)])
+SscaleY = z_diag(sdY)
+X = X*inv(SscaleX); # divide each entry by the SD of its variable ==> standardizing
+Y = Y*inv(SscaleY);
+roX , colX = size(X);
+roY , colY = size(Y);
+CVE = CovVarEdsi(X,Y)
+Cov_XY_XY, Cov_XX_XX, Cov_YY_YY, Cov_XX_YY =  CVE[:Cov_XY_XY], CVE[:Cov_XX_XX], CVE[:Cov_YY_YY], CVE[:Cov_XX_YY]
+sigmaHat = EmpCov(X,Y)
+roSig , colSig = size(sigmaHat);
+T = 1
+maxIter = 2000
+m = Model(optimizer_with_attributes(Ipopt.Optimizer,"max_iter" => maxIter, "tol" => 1e-08    ))
+set_optimizer_attribute(m, MOI.Silent(), true)
+@variable(m, A[1:colX,1:colX]) 
+JuMP.register(m, :ObjectiveFunction, nv, ObjectiveFunction, autodiff=true)
+@NLobjective(m, Min, ObjectiveFunction(X, Y, sigmaHat, T, A...) ) #Does not work here 
+@show JuMP.optimize!(m)
+Aopt = @show value(A)
+Aopt = NamedArray(A, (namesX, namesY))
+return Aopt
+end
 
 end
