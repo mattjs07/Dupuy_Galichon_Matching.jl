@@ -8,5 +8,4 @@ Unfortunately, we were not able to achieve the last step of optimisation, thereb
 Modules = [Dupuy_Galichon_Matching]
 ```
 
-You can check the documentation at :  https://mattjs07.github.io/Dupuy_Galichon_Matching.jl/dev/
-end
+You can check the documentation at :  https://mattjs07.github.io/Dupuy_Galichon_Matching.jl/dev
