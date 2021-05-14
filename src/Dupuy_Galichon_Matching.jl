@@ -100,7 +100,7 @@ end
 """
     CovVarEdsi(X::Matrix,Y::Matrix )
 
-Returns Cov_XY_XY , Cov_XX_XX, Cov_YY_YY, Cov_XX_YY
+Returns Cov _XY _XY , Cov _XX _XX, Cov _YY _YY, Cov _XX _YY
 """
 function CovVarEdsi(X::Matrix,Y::Matrix )
     if size(X) != size(Y)
@@ -302,8 +302,7 @@ function OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int64)
     """
         ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64,A... )
     Objective function used to compute the optimal Affinity Matrix. \\
-    A is splat as it is the argument over which we arg min using JuMP. \\
-    colX is required to reshape A into a matrix.
+    A is splat as it is the argument over which we arg min using JuMP.
     """
     function ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64, colX::Int, A... )
     
@@ -328,8 +327,8 @@ AffinityMatrix(df::DataFrame)
 Function allowing to compute the Affinity Matrix between two groups X and Y. \\
 For m characteristics per group, returns a m x m Affinity Matrix. \\
 !!! The input Dataframe contains columns of characteristics which must be ordered as follow : \\
-> The Number of characteristics for X must be equal to the number of characteristics of y. \\
-> If the total number of columns = n, then columns 1 to n/2 are X's and columns n/2+1 to n are Y's. \\
+> The Number of characteristics for X must be equal to the number of characteristics of Y. \\
+> If the total number of columns = n, then columns 1:n/2 are X's and columns n/2+1:n are Y's. \\
 > In each group the column must be ordered alike. \\
 > e.g A Dataframe with 3 characteristics, the columns are arranged as :  [X.education, X.age, X.sex , Y.education, Y.age, Y.sex ] \\
 """
