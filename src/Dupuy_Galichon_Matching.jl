@@ -260,7 +260,7 @@ end
 
 Returns the Optimal Pi, used in ObjectiveFunction() for optimization.
 """
-function OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int64)
+function OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int)
 
     maxIter = 10
     pdfX,pdfY = discretePdf(X,Y);
