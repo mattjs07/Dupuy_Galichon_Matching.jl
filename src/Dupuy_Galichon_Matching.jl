@@ -256,7 +256,7 @@ function StartingValues(X::Matrix, Y::Matrix)
 end
 
 """
-    OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int64)
+    OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int)
 
 Returns the Optimal Pi, used in ObjectiveFunction() for optimization.
 """
@@ -300,11 +300,11 @@ function OptimalPi(auxVar::Matrix, X::Matrix, Y::Matrix, T::Int)
     end
     
     """
-        ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64,A... )
+        ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int,A... )
     Objective function used to compute the optimal Affinity Matrix. \\
     A is splat as it is the argument over which we arg min using JuMP.
     """
-    function ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int64, colX::Int, A... )
+    function ObjectiveFunction(X::Matrix,Y::Matrix,sigmaHat::Matrix,T::Int, colX::Int, A... )
     
         A = reshape(collect(A), (colX, colX)) #colX is the number of columns of X (same as Y)
         auxVar = X * A * Y'
