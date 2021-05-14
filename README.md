@@ -7,7 +7,7 @@
 
 In this replication study, we do translate the original matlab code into Julia lang.
 
-
+The documentation is available here :  https://mattjs07.github.io/Dupuy_Galichon_Matching.jl/dev/
 ```@autodocs
 Modules = [Dupuy_Galichon_Matching]
 ```
